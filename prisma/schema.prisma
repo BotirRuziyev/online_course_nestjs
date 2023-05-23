@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String
+  description String
+  image       String?
+  Courses     Courses[]
+}
+
+model Image {
+  id         Int      @id @default(autoincrement())
+  uploadedAt DateTime @default(now())
+  imgName    String   @unique
+  unused     Boolean  @default(true)
+}
+
+model Courses {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  title       String
+  image       String
+  description String
+  author      String
+  amount      Int
+  categoryId  Int
+  category    Category      @relation(fields: [categoryId], references: [id])
+  Departments Departments[]
+}
+
+model Departments {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String
+  description String
+  coursesId   Int
+  courses     Courses   @relation(fields: [coursesId], references: [id])
+  Lessons     Lessons[]
+}
+
+model Lessons {
+  id           Int         @id @default(autoincrement())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  title        String
+  description  String
+  departmentId Int
+  departmens   Departments @relation(fields: [departmentId], references: [id])
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  hash      String
+  hashRt    String?
+  firstName String?
+  lastName  String?
+
+  @@map("users")
+}

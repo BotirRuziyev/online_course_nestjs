@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  courses-db:
+    image: postgres:12.2-alpine
+    ports: 
+      - 5436:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+    networks:
+      - courses-db
+networks:
+  courses-db:
